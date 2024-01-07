@@ -1,0 +1,16 @@
+{
+    "rules": {
+      ".read": false,
+      ".write": false,
+      
+      "payments": {
+        ".read": "auth != null", 
+        ".write": "auth != null", 
+  
+        "$paymentId": {
+          ".validate": "newData.child('stripeToken').isString() && newData.child('amount').isNumber()"
+        }
+      }
+    }
+  }
+  

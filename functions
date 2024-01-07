@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+      
+    
+    "payments": {
+      ".read": "auth != null", // Only authenticated users can read payment data
+      ".write": "auth != null", // Only authenticated users can write payment data
+
+      "$paymentId": {
+        ".validate": "newData.child('stripeToken').isString() && newData.child('amount').isNumber()",
+        // Allow writes if the new data adheres to the structure specified
+      }
+    }
+  }
+}
