@@ -77,6 +77,7 @@
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
   }
 
   .container d-flex align-items-center justify-content-between {
@@ -115,11 +116,7 @@
   }
 
 
-  @media (max-width: 768px) {
-    body {
-        padding-top: 60px; /* Adjust the value for mobile responsiveness */
-    }
-  }
+
 
   form {
     display: flex;
@@ -1113,7 +1110,7 @@
  
  
   #footer {
-    background-color: #fff;
+    background-color: #5f2cd6;
     color: #fff; /* Set your preferred text color */
     padding: 30px 0px;
     width: 100%; /* Make the container full width */
