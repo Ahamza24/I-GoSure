@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>I-GoSure - Get Your Quotation</title>
     <meta content="" name="description">
@@ -14,6 +15,11 @@
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
 
+        <!-- Vendor CSS Files -->
+        <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
      
 
       <!-- Template Main CSS File -->
@@ -54,31 +60,43 @@
           <img src="assets/img/filler.png" alt="Your Logo">
            <!-- Uncomment below if you prefer to use an image logo -->
            <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-         </div>
+        </div>
         
-        <h1>Car Insurance Quotation</h1>
-        <form id="quotationForm">
-          <label for="registration">Enter Registration Number:</label>
-          <input style="background-color: #F9C038; max-width: 300px; text-size-adjust: 10px;" type="text" id="registration" name="registration" placeholder="ENTER REG">
-          <span style="color: #fff;">-----------------------------------</span>
-          <button style="max-width: 300px;" type="button" onclick="checkRegistration()">Get Quotation</button>
+      <h1>Car Insurance Quotation</h1>
+      <form id="quotationForm" onsubmit="event.preventDefault()">
+        <label for="registration">Enter Registration Number:</label>
+        <input style="background-color: #F9C038; max-width: 300px; text-size-adjust: 10px;" type="text" id="registrationNumber" placeholder="ENTER REG">
+        <span style="color: #fff;">-----------------------------------</span>
+        <button style="max-width: 300px;" type="button" onclick="handlePaymentAndGeneratePDF(document.getElementById('registrationNumber').value)">Get Quotation</button>
       </form>
       
-      <div id="carDetails"></div>
+      <!-- Add placeholders for car details -->
+      <div id="car-details">
+        <script>
+          console.log('randomPart: ', ''.randomPart(5));
+        </script>
+        <h2>Car Details:</h2>
+        <p>Make: <span id="car-make"></span></p>
+        <p>Model: <span id="car-model"></span></p>
+        <p>Year: <span id="car-year"></span></p>
+      </div>
       
-      <form id="paymentForm" style="display:none;">
-          <h2>Enter Personnel Details and Proceed to Payment</h2>
-          <div id="quotationAmount"></div>
-          <label for="fullName">Full Name:</label>
-          <input type="text" id="fullName" name="fullName" required>
+      <form id="paymentForm">
+        <h2>Enter Personal Details and Proceed to Payment</h2>
+        <div id="quotationAmount"></div>
+    
+        <label for="cardHolder">Cardholder Name:</label>
+        <input type="text" id="cardHolder" name="cardHolder" required>
+    
+        <label for="cardElement">Card Details:</label>
+        <div id="cardElement"></div>
+        <div id="card-errors" role="alert"></div>
+    
+        <button style="background-color: #3498db;" type="button" onclick="processPayment()">Proceed to Payment</button>
+    </form>
+    
       
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
-      
-          <button style="background-color: #3498db;" type="button" onclick="processPayment()">Proceed to Payment</button>
-      </form>
-      
-      <!-- Include your JavaScript code here -->
+      <!-- Include your JavaScript code here 
       <script>
           // Function to check registration and display car details
           async function checkRegistration() {
@@ -131,18 +149,33 @@
                   // Handle error on the UI
               }
           }
-      </script>
+      </script>-->
 
 
         <div class="logo">
-          <img src="assets/img/fillerS.png" alt="Your Logo">
+          <img src="assets/img/filler.png" alt="Your Logo">
            <!-- Uncomment below if you prefer to use an image logo -->
            <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-         </div>
-      
+        </div>
+
+
+ <!-- Template Main JS File -->
+ <script src="assets/js/main.js"></script>
+ 
 
 
   </body>
+
+
+
+             <!-- Vendor JS Files -->
+             <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+             <script src="assets/vendor/aos/aos.js"></script>
+             <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+             <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+             <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+             <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+             <script src="assets/vendor/php-email-form/validate.js"></script>
 
   <!-- ======= Footer ======= -->
     <footer id="footer">
@@ -173,18 +206,4 @@
       </div>
     </footer><!-- End Footer -->
 
-    
-
-      <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-
-     <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
 </html>

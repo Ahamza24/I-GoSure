@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       
         <title>I-GoSure - Insurance Check</title>
         <meta content="" name="description">
@@ -56,65 +57,52 @@
   </header>
   
   <div class="logo">
-    <a href="index.html" style="background-color: transparent;" ><img src="assets/img/regcheck.png" alt="Your Logo" href="index.html"></a>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+    <img src="assets/img/filler.png" alt="Your Logo">
+     <!-- Uncomment below if you prefer to use an image logo -->
+     <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
   </div>
+  
 
   <div id="proofResult">
     <p>Enter Registration Number:</p>
     <input type="text" id="registrationNumber" placeholder="Registration Number">
-    <button onclick="getProofOfSubscription()">Get Proof of Subscription</button>
+    <button onclick="fetchClaimNumber()">Get Proof of Subscription</button>
     <div id="resultContainer"></div>
   </div>
 
   <div class="logo">
-    <img src="assets/img/fillerS.png" alt="Your Logo">
+    <img src="assets/img/filler.png" alt="Your Logo">
      <!-- Uncomment below if you prefer to use an image logo -->
      <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
    </div>
 
-<!-- Include your JavaScript code here -->
-<script>
-    // Function to fetch claim number from Realtime Database
-    async function fetchClaimNumber(registrationNumber) {
-        try {
-            // Get a reference to the Realtime Database
-            const database = firebase.database();
-
-            // Retrieve claim number based on registration number
-            const claimNumberRef = database.ref(`insurance-quotes/${registrationNumber}/claimNumber`);
-            const snapshot = await claimNumberRef.once('value');
-
-            const claimNumber = snapshot.val();
-            return claimNumber;
-        } catch (error) {
-            console.error('Error fetching claim number:', error.message);
-            // Handle error on the UI
-            return { error: error.message };
-        }
-    }
-
-    function getProofOfSubscription() {
-        // Get value from the input field
-        const registrationNumber = document.getElementById('registrationNumber').value;
-
-        // Call the function to fetch claim number
-        fetchClaimNumber(registrationNumber)
-            .then(claimNumber => {
-                // Display the result in the resultContainer (update this based on your UI)
-                document.getElementById('resultContainer').innerText = 'Claim Number: ' + claimNumber;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle error on the UI
-                document.getElementById('resultContainer').innerText = 'Error: ' + error.message;
-            });
-    }
-</script>
-
   <script src="assets/js/main.js"></script>
+  <script>
+    function fetchClaimNumber() {
+      const registrationNumber = document.getElementById('registrationNumber').value;
+      fetch('http://localhost:3000/checkRegistration/' + registrationNumber)
+        .then(response => response.json())
+        .then(data => {
+          const resultContainer = document.getElementById('resultContainer');
+          resultContainer.innerHTML = data.message;
+          if (data.claimNumber && data.carDetails) {
+            resultContainer.innerHTML += '<br>Claim Number: ' + data.claimNumber;
+            resultContainer.innerHTML += '<br>Car Details: ' + data.carDetails;
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    </script>
 </body>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="assets/vendor/aos/aos.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
 
 
 <!-- ======= Footer ======= -->
@@ -147,13 +135,6 @@
   </footer><!-- End Footer -->
 
 
-   <!-- Vendor JS Files -->
-   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-   <script src="assets/vendor/aos/aos.js"></script>
-   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-   <script src="assets/vendor/php-email-form/validate.js"></script>
+   
 
 </html>

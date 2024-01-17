@@ -1,15 +1,6 @@
-
-const admin = require('firebase-admin');
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-const stripe = require('stripe')(stripeSecretKey);
-const PDFDocument = require('pdfkit');
-const nodemailer = require('nodemailer');
-
-
-
 /**
 * Template Name: Vesperr
-* Updated: Sep 18 2023 with Bootstrap v5.3.2
+* Updated: Jan 09 2024 with Bootstrap v5.3.2
 * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
@@ -20,6 +11,14 @@ const nodemailer = require('nodemailer');
   /**
    * Easy selector helper function
    */
+ 
+  const jsdom = require("jsdom");
+  const { JSDOM } = jsdom;
+
+  const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+  global.document = dom.window.document;
+  global.window = dom.window;
+
   const select = (el, all = false) => {
     el = el.trim()
     if (all) {
@@ -29,9 +28,12 @@ const nodemailer = require('nodemailer');
     }
   }
 
+  // Your code here
   /**
    * Easy event listener function
    */
+
+  
   const on = (type, el, listener, all = false) => {
     let selectEl = select(el, all)
     if (selectEl) {
@@ -105,6 +107,22 @@ const nodemailer = require('nodemailer');
   }
 
   /**
+   * Back to top button
+   */
+  let backtotop = select('.back-to-top')
+  if (backtotop) {
+    const toggleBacktotop = () => {
+      if (window.scrollY > 100) {
+        backtotop.classList.add('active')
+      } else {
+        backtotop.classList.remove('active')
+      }
+    }
+    window.addEventListener('load', toggleBacktotop)
+    onscroll(document, toggleBacktotop)
+  }
+
+  /**
    * Mobile nav toggle
    */
   on('click', '.mobile-nav-toggle', function(e) {
@@ -152,312 +170,247 @@ const nodemailer = require('nodemailer');
     }
   });
 
-  /**
-   * Initiate portfolio lightbox 
-   */
-  const portfolioLightbox = GLightbox({
-    selector: '.portfolio-lightbox'
-  });
 
-  /**
-   * Portfolio details slider
-   */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
-
-  /**
-   * Animation on scroll
-   */
-  window.addEventListener('load', () => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    })
-  });
-
-  /**
-   * Initiate Pure Counter 
-   */
-  new PureCounter();
 
 })()
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDA-iruf5t3PN3nSUNa7hHPwO1v-qS63Rs",
-  authDomain: "i-gosure.firebaseapp.com",
-  databaseURL: "https://i-gosure-default-rtdb.firebaseio.com", // Replace with your actual Firebase database URL
-  projectId: "i-gosure",
-  storageBucket: "i-gosure.appspot.com",
-  messagingSenderId: "938934389841",
-  appId: "1:938934389841:web:92187069449c10b980bc70",
-  measurementId: "G-3GTNX2147D"
-};
 
-// Example: Writing insurance quote data
-const quoteData = {
-  registration: "<registrationNumber>",
-  claimNumber: "<claimNumber>",
-  carDetails: {
-    make: "<carMake>",
-    model: "<carModel>",
-    year: "<carYear>",
-    color: "<carColor>",
-    // ...
-  },
-  amount: "<quoteAmount>",
-  timestamp: firebase.database.ServerValue.TIMESTAMP,
-  paymentStatus: "Pending",
-};
-
-// Write to the database
-database.ref('insurance-quotes').push(quoteData);
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Get a reference to the Realtime Database
-const database = firebase.database();
-
-// Assuming you have an HTML form with input fields for registration, personal details, and bank details
-
-// Function to handle the registration check and display car details
-// Function to check registration against an API
-async function checkRegistration(registrationNumber) {
-  try {
-    // Use your registration API here
-    // Replace 'your_registration_api_url' with the actual URL of your registration API
-    const response = await fetch('9134bdee-2490-4f76-ae30-fc01736f9b80', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ registrationNumber }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Registration API failed');
+  // Import necessary modules
+  const admin = require('firebase-admin');
+  const PDFDocument = require('pdfkit');
+  const nodemailer = require('nodemailer');
+  const express = require('express');
+  const app = express();
+  const port = 3000;
+  
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDA-iruf5t3PN3nSUNa7hHPwO1v-qS63Rs",
+    authDomain: "i-gosure.firebaseapp.com",
+    databaseURL: "https://i-gosure-default-rtdb.firebaseio.com",
+    projectId: "i-gosure",
+    storageBucket: "i-gosure.appspot.com",
+    messagingSenderId: "938934389841",
+    appId: "1:938934389841:web:92187069449c10b980bc70",
+    measurementId: "G-3GTNX2147D"
+  };
+  
+  // Initialize Firebase
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: 'https://your-database-url.firebaseio.com'
+  });
+  
+  // Get a reference to the database service
+  const database = admin.database();
+  
+  class ClaimNumberGenerator {
+    constructor(prefix = 'IC', length = 10) {
+      this.prefix = prefix;
+      this.length = length;
     }
-
-    // Assuming the API response contains car details in JSON format
-    const carDetails = await response.json();
-    return carDetails;
-  } catch (error) {
-    console.error('Error checking registration:', error.message);
-    // Handle error on the UI or throw an error to be caught in the calling function
-    throw error;
+  
+    generateClaimNumber() {
+      const timestamp = Date.now().toString();
+      const randomPart = this.generateRandomPart();
+      const claimNumber = this.prefix + timestamp + randomPart;
+      return claimNumber;
+    }
+  
+    generateRandomPart() {
+      const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let randomPart = '';
+  
+      for (let i = 0; i < this.length; i++) {
+        const randomIndex = Math.floor(Math.random() * randomChars.length);
+        randomPart += randomChars.charAt(randomIndex);
+      }
+  
+      return randomPart;
+    }
   }
-}
-
-// Function to handle registration check and display car details
-async function handleRegistrationCheck() {
-  const registrationNumber = document.getElementById('registrationInput').value;
-
-  try {
-    // Check registration against an API
-    const carDetails = await checkRegistration(registrationNumber);
-
-    // Display car details (you can update this part based on your UI)
-    console.log('Car Details:', carDetails);
-
-    // After displaying car details, you can request personal and bank details
-    // (assuming you have a function for this on your UI)
-    requestPersonalAndBankDetails(registrationNumber);
-  } catch (error) {
-    console.error('Error checking registration:', error.message);
-    // Handle error on the UI
+  
+  app.get('/checkRegistration/:registrationNumber', async (req, res) => {
+    const registrationNumber = req.params.registrationNumber;
+    const userRef = db.ref('users/' + registrationNumber);
+    
+    userRef.once('value', snapshot => {
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        res.json({ 
+          message: 'User registration input found in the database.',
+          claimNumber: userData.claimNumber,
+          carDetails: userData.carDetails
+        });
+      } else {
+        res.json({ message: 'User registration input not found in the database.' });
+      }
+    });
+  });
+  
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  
+  async function handleStripePayment(amount, token) {
+    try {
+      const charge = await stripe.charges.create({
+        amount: amount,
+        currency: 'gdp',
+        description: 'Insurance Claim',
+        source: token,
+      });
+      return charge;
+    } catch (error) {
+      console.error('Error handling Stripe payment:', error.message);
+      throw error;
+    }
   }
-}
-
-// Function to handle payment and generate PDF after successful payment
-async function handlePaymentAndGeneratePDF() {
-  const registrationNumber = document.getElementById('registrationInput').value;
-  const personalDetails = getPersonalDetails(); // Implement this function to get personal details
-  const bankDetails = getBankDetails(); // Implement this function to get bank details
-
-  try {
-    // Generate insurance quote and claim number
-    const { quoteID, claimNumber } = await generateInsuranceQuote(registrationNumber, quoteData.amount); // Fix: Use quoteData.amount instead of amount
-
-    // Display quote information on the UI (you can update this part based on your UI)
-    console.log('Quote Information:', { quoteID, claimNumber });
-
-    // Assuming you have a function to handle payment with Stripe on your UI
-    const token = await handleStripePayment(); // Implement this function on your UI
-
-    // After successful payment, store personal details and car details
-    if (token) {
-      // Store personal details in Realtime Database
+  
+  const fetch = require('node-fetch');
+  async function handlePaymentAndGeneratePDF(registrationNumber, token) {
+    try {
+      // Validate registration number
+      if (!registrationNumber) {
+        throw new Error('Registration number is required');
+      }
+  
+      // Call the registration validation API
+      const apiKey = 3196|pJIwJd8qbCbUeZzwYBqmOFD3tKPhXRcnUqpXDAmJ; // Replace with your actual API key
+      const response = await fetch(`https://api.example.com/regcheck?reg=${registrationNumber}&api_key=${apiKey}`);
+      const data = await response.json();
+  
+      if (!data.isValid) {
+        throw new Error('Invalid registration number');
+      }
+  
+      // Calculate price based on car age and contract length
+      const price = calculatePrice(data.carAge, data.contractLength);
+  
+      // Handle payment using Stripe
+      const charge = await handleStripePayment(price, token);
+  
+      // Generate claim number
+      const claimNumberGenerator = new ClaimNumberGenerator();
+      const claimNumber = claimNumberGenerator.generateClaimNumber();
+  
+      // Store personal and car details in Firebase
       await storePersonalDetails(registrationNumber, personalDetails);
-
-      // Store car details in Realtime Database
-      const carDetails = await checkRegistration(registrationNumber);
       await storeCarDetails(registrationNumber, carDetails);
-
+  
       // Generate PDF
-      const pdfContent = `Welcome to I-GoSure Insurance. Your claim number is: ${claimNumber}`;
-      generateAndSendPDF(pdfContent, personalDetails.email);
-
-      // You can also update the UI to show that the process is complete
-      console.log('Process completed successfully!');
+      const doc = new PDFDocument();
+      doc.text(`Claim Number: ${claimNumber}`);
+      
+      return claimNumber;
+    } catch (error) {function calculatePrice(carAge, coverLength) {
+    if (coverLength === '1 day') {
+      if (carAge < 5) {
+        return 20.56;
+      } else {
+        return 29.99;
+      }
+    } else if (coverLength === '1 week') {
+      if (carAge < 5) {
+        return 60.29;
+      } else {
+        return 71.99;
+      }
+    } else if (coverLength === '1 month') {
+      if (carAge < 5) {
+        return 201.99;
+      } else {
+        return 250.99;
+      }
+    } else {
+      throw new Error('Invalid cover length');
     }
-  } catch (error) {
-    console.error('Error processing payment:', error.message);
-    // Handle error on the UI
   }
-}
-
-
-// Function to store personal details in Realtime Database
-async function storePersonalDetails(registrationNumber, personalDetails) {
-  try {
-    // Get a reference to the Realtime Database
-    const database = firebase.database();
-
-    // Store personal details under a path specific to the registration number
-    const personalDetailsRef = database.ref(`personal-details/${registrationNumber}`);
-    await personalDetailsRef.set(personalDetails);
-
-    console.log('Personal details stored in Realtime Database.');
-  } catch (error) {
-    console.error('Error storing personal details:', error.message);
-    // Handle error on the UI
+      console.error('Error handling payment and generating PDF:', error.message);
+      throw error;
+    }
   }
-}
+  async function storePersonalDetails(registrationNumber, personalDetails) {
+    try {
+      const personalDetailsRef = database.ref(`insurance-quotes/${registrationNumber}/personalDetails`);
+      await personalDetailsRef.set(personalDetails);
+    } catch (error) {
+      console.error('Error storing personal details:', error.message);
+      throw error;
+    }
+  }
+  
+  // Declare and assign a value to 'claimNumber'
+  const claimNumber = 'IC1625678901';
+  
+  // Generate PDF
+  const doc = new PDFDocument(); 
+  doc.text(`Claim Number: ${claimNumber}`);
+  
+  async function storeCarDetails(registrationNumber, carDetails) {
+    try {
+      const carDetailsRef = database.ref(`insurance-quotes/${registrationNumber}/carDetails`);
+      await carDetailsRef.set(carDetails);
+    } catch (error) {
+      console.error('Error storing car details:', error.message);
+      throw error;
+    }
+  }
 
 
-// Function to generate and send PDF
-async function generateAndSendPDF(content, email) {
-  try {
-    // Create PDF using a library like pdfkit
-    const pdfDoc = new PDFDocument();
-    pdfDoc.text(content);
-    const pdfBuffer = await new Promise((resolve, reject) => {
-      const buffers = [];
-      pdfDoc.on('data', buffers.push.bind(buffers));
-      pdfDoc.on('end', () => resolve(Buffer.concat(buffers)));
-      pdfDoc.end();
-    });
 
-    // Send email with PDF attachment
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'your-email@gmail.com', // Replace with your actual Gmail account
-        pass: 'your-password', // Replace with your email password or use an app-specific password
-      },
-    });
+  let transporter = nodemailer.createTransport({
+    service: 'gmail', // use 'gmail' or any other mail service
+    auth: {
+      user: 'fill this in with your Gmail', // your email
+      pass: 'Gmail Password here' // your email password
+    }
+  });
 
-    const mailOptions = {
-      from: 'your-email@gmail.com',
-      to: email,
-      subject: 'Welcome to I-GoSure Insurance',
-      text: `Thank you for choosing I-GoSure Insurance. Your claim number is: ${claimNumber}`,
+  async function sendEmailWithPDF(email, pdfPath) {
+    let mailOptions = {
+      from: 'adamu44341@gmail.com', // sender address
+      to: email, // list of receivers
+      subject: 'Insurance PDF', // Subject line
+      text: 'Please find attached the Insurance PDF.', // plain text body
       attachments: [
         {
-          filename: 'welcome_letter.pdf',
-          content: pdfBuffer,
-        },
-      ],
+          path: pdfPath
+        }
+      ]
     };
 
-    await transporter.sendMail(mailOptions);
-
-    console.log('Welcome email sent to:', email);
-  } catch (error) {
-    console.error('Error generating or sending PDF:', error.message);
-    // Handle error on the UI
-  }
-}
-
-// Function to fetch claim number from Realtime Database
-async function fetchClaimNumber(registrationNumber) {
-  try {
-    // Get a reference to the Realtime Database
-    const database = firebase.database();
-
-    // Retrieve claim number based on registration number
-    const claimNumberRef = database.ref(`insurance-quotes/${registrationNumber}/claimNumber`);
-    const snapshot = await claimNumberRef.once('value');
-
-    const claimNumber = snapshot.val();
-    return claimNumber;
-  } catch (error) {
-    console.error('Error fetching claim number:', error.message);
-    // Handle error on the UI
-  }
-}
-
-// Function to store car details in Realtime Database
-async function storeCarDetails(registrationNumber, carDetails) {
-  try {
-    // Get a reference to the Realtime Database
-    const database = firebase.database();
-
-    // Store car details under a path specific to the registration number
-    const carDetailsRef = database.ref(`car-details/${registrationNumber}`);
-    await carDetailsRef.set(carDetails);
-
-    console.log('Car details stored in Realtime Database.');
-  } catch (error) {
-    console.error('Error storing car details:', error.message);
-    // Handle error on the UI
-  }
-}
-
-// Modify the handlePaymentAndGeneratePDF function to store car details
-async function handlePaymentAndGeneratePDF() {
-  const registrationNumber = document.getElementById('registrationInput').value;
-  const personalDetails = getPersonalDetails(); // Implement this function to get personal details
-  const bankDetails = getBankDetails(); // Implement this function to get bank details
-
-  try {
-    // Generate insurance quote and claim number
-    const { quoteID, claimNumber } = await generateInsuranceQuote(registrationNumber, amount);
-
-    // Display quote information on the UI (you can update this part based on your UI)
-    console.log('Quote Information:', { quoteID, claimNumber });
-
-    // Assuming you have a function to handle payment with Stripe on your UI
-    const token = await handleStripePayment(); // Implement this function on your UI
-
-    // After successful payment, store personal details and car details
-    if (token) {
-      // Store personal details in Realtime Database
-      await storePersonalDetails(registrationNumber, personalDetails);
-
-      // Store car details in Realtime Database
-      const carDetails = await checkRegistration(registrationNumber);
-      await storeCarDetails(registrationNumber, carDetails);
-
-      // Generate PDF
-      const pdfContent = `Welcome to I-GoSure Insurance. Your claim number is: ${claimNumber}`;
-      generateAndSendPDF(pdfContent, personalDetails.email);
-
-      // You can also update the UI to show that the process is complete
-      console.log('Process completed successfully!');
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      console.log('Message sent: %s', info.messageId);
+    } catch (error) {
+      console.error('Error sending email with PDF:', error.message);
+      throw error;
     }
-  } catch (error) {
-    console.error('Error processing payment:', error.message);
-    // Handle error on the UI
   }
-}
+  
+  app.post('/handlePayment', async (req, res) => {
+    try {
+      const { registrationNumber, token } = req.body;
+  
+      // Handle payment and generate PDF
+      const claimNumber = await handlePaymentAndGeneratePDF(registrationNumber, token);
+  
+      // Send response
+      res.json({ claimNumber });
+    } catch (error) {
+      console.error('Error handling payment and generating PDF:', error.message);
+      res.status(500).json({ error: 'An error occurred while handling payment and generating PDF' });
+    }
+  });
+  
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+  
+  // End the PDF document
+  doc.end();if (typeof window !== 'undefined') {
+    window.String.prototype.randomPart = String.prototype.randomPart;
+  }
+  
+ 
 
-// Usage example to fetch claim number
-const registrationNumber = 'your_registration_number';
-const fetchedClaimNumber = await fetchClaimNumber(registrationNumber);
-console.log('Fetched Claim Number:', fetchedClaimNumber);
+
 
