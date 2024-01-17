@@ -31,15 +31,19 @@
   h5{
     text-align: left;
   }
+  h3{
+    color: #3498db;
+  }
 
   body {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
     align-items: center;
-    text-align: center;
     font-family: Arial, sans-serif;
     background-color: #fff; /* Background color for the whole page */
   }
+ 
 
   header {
     margin: 0px;
@@ -51,6 +55,10 @@
   li{
     text-align: left;
     list-style: none;
+  }
+
+  ul{
+    text-align: left;
   }
 
 
@@ -73,17 +81,12 @@
     border-radius: 5px;
   }
 
-  body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-  }
+  
 
   .container d-flex align-items-center justify-content-between {
     background-color: #3498db;
     color: #fff;
-    text-align: center;
+    text-align: left;
     padding: 1em 0;
   }
 
@@ -100,16 +103,12 @@
   }
 
   li{
-    text-align: center;
+    text-align: left;
     gap: 2px;
   }
 
 
-  #about {
-    padding-top: 0px; /* Adjust the value as needed to create space below the fixed header */
-    background-color: #00bdec;
-    color: white;
-  }
+  
 
  h5{
     text-align: center;
@@ -129,26 +128,23 @@
   }
 
   input {
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    align-items: center;
   }
 
   
 
   button {
-    background-color: #3498db;
-    color: white;
-    padding: 9px 25px;
+    background-color: #fff;
+    color: #3498db;
+    padding: 25px 25px;
     border: none;
     cursor: pointer;
     border-radius: 50px;
-    margin-left: 50%;
-    margin-right: 50%;
-    min-width: 250px;
     align-items: center;
-    flex-direction: column;
   }
 
   
@@ -694,17 +690,22 @@
     margin-bottom: 0;
   }
 
+  .about {
+    background-color: #3498db;
+    color: #fff; /* Set your preferred text color */
+    padding: 30px 0px;
+    width: 100%; /* Make the container full width */
+    max-width: 2000px;
+    display: block;
+  }
+
   #about {
-    padding-top: 80px; /* Adjust the value as needed to prevent overlap */
-    border-radius: 50px;
-    color: #fff;
+    padding-top: 0px; /* Adjust the value as needed to create space below the fixed header */
+    background-color: #00bdec;
+    color: white;
   }
 
-  body {
-    padding-top: 80px; /* Adjust the value as needed for the space between header and content */
-  }
-
-
+  
   .about .content .btn-learn-more {
     font-family: "Raleway", sans-serif;
     font-weight: 600;
@@ -721,6 +722,8 @@
     border: 2px solid #3498db;
   }
 
+  
+
   .about .content .btn-learn-more:hover {
     background: #3498db;
     color: #fff;
@@ -730,13 +733,7 @@
   /*--------------------------------------------------------------
   # Services
   --------------------------------------------------------------*/
-  body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #fff;
-  }
+  
 
 
   header {
@@ -759,7 +756,7 @@
     padding: 1em;
   }
 
-  services {
+  .services {
     display: flex;
     flex-direction: column; /* Updated to align items vertically */
     flex-wrap: wrap;
@@ -840,79 +837,7 @@
 
 
   /*--------------------------------------------------------------
-  # More Services
-  --------------------------------------------------------------*/
-  .more-services {
-    padding-top: 20px;
-  }
-
-  .more-services .card {
-    border: 0;
-    padding: 160px 20px 20px 20px;
-    position: relative;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-  }
-
-  .more-services .card-body {
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 15px 30px;
-    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
-    transition: ease-in-out 0.4s;
-    border-radius: 5px;
-  }
-
-  .more-services .card-title {
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
-  .more-services .card-title a {
-    color: #222222;
-  }
-
-  .more-services .card-text {
-    color: #5e5e5e;
-  }
-
-  .more-services .read-more a {
-    color: #777777;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 12px;
-    transition: 0.4s;
-  }
-
-  .more-services .read-more a:hover {
-    text-decoration: underline;
-  }
-
-  .more-services .card:hover .card-body {
-    background: #3498db;
-  }
-
-  .more-services .card:hover .read-more a,
-  .more-services .card:hover .card-title,
-  .more-services .card:hover .card-title a,
-  .more-services .card:hover .card-text {
-    color: #fff;
-  }
-
-
-  /*--------------------------------------------------------------
-  # Quotation
-  --------------------------------------------------------------*/
-  body {
-    font-family: 'Helvetica', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-  }
+  # Quotation--------------------------------------------------------------*/
 
   header {
     color: white;
@@ -965,11 +890,11 @@
 
   input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 50px;
+    align-items: center;
   }
 
   
@@ -977,85 +902,28 @@
   /*--------------------------------------------------------------
   # Team
   --------------------------------------------------------------*/
-  .team .member {
-    margin-bottom: 20px;
-    overflow: hidden;
-    text-align: center;
-    border-radius: 5px;
-    background: #fff;
-    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  #proofResult {
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+
+    border: none;
   }
 
-  .team .member .member-img {
-    position: relative;
-    overflow: hidden;
+  #proofResult p {
+    margin: 0 0 15px;
   }
 
-  .team .member .social {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    height: 40px;
-    opacity: 0;
-    transition: ease-in-out 0.3s;
-    background: rgba(255, 255, 255, 0.85);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+  #proofResult button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
   }
-
-  .team .member .social a {
-    transition: color 0.3s;
-    color: #222222;
-    margin: 0 10px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .team .member .social a i {
-    line-height: 0;
-  }
-
-  .team .member .social a:hover {
-    color: #3498db;
-  }
-
-  .team .member .social i {
-    font-size: 18px;
-    margin: 0 2px;
-  }
-
-  .team .member .member-info {
-    padding: 25px 15px;
-  }
-
-  .team .member .member-info h4 {
-    font-weight: 700;
-    margin-bottom: 5px;
-    font-size: 18px;
-    color: #222222;
-  }
-
-  .team .member .member-info span {
-    display: block;
-    font-size: 13px;
-    font-weight: 400;
-    color: #aaaaaa;
-  }
-
-  .team .member .member-info p {
-    font-style: italic;
-    font-size: 14px;
-    line-height: 26px;
-    color: #777777;
-  }
-
-  .team .member:hover .social {
-    opacity: 1;
-  }
-
   
   /*--------------------------------------------------------------
   # F.A.Q
@@ -1110,7 +978,7 @@
  
  
   #footer {
-    background-color: #5f2cd6;
+    background-color: #3498db;
     color: #fff; /* Set your preferred text color */
     padding: 30px 0px;
     width: 100%; /* Make the container full width */
@@ -1163,7 +1031,6 @@
 }
 
 section, footer {
-  text-align: center;
   background-color: #fff; /* Header background color */
 }
 
